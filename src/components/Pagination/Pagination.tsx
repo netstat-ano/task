@@ -8,7 +8,7 @@ const Pagination: React.FC<{}> = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const totalPages = useAppSelector((state) => state.products.totalPages);
     const currentPage = useAppSelector((state) => state.products.page);
-    const products = useAppSelector((state) => state.products.products);
+    const page = useAppSelector((state) => state.products.page);
     const totalProducts = useAppSelector(
         (state) => state.products.totalProducts
     );
@@ -25,7 +25,14 @@ const Pagination: React.FC<{}> = () => {
             );
             dispatch(productActions.replaceProducts(currentProducts));
         }
-    }, [searchParams.get("page"), totalProducts, searchParams.get("id")]);
+    }, [
+        page,
+        totalProducts,
+        currentPage,
+        dispatch,
+        productsPerPage,
+        searchParams,
+    ]);
     const onPreviousHandler = () => {
         if (currentPage - 1 >= 1) {
             searchParams.set("page", String(currentPage - 1));

@@ -1,5 +1,5 @@
 import { TextField, Button } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAppDispatch } from "../../hooks/use-app-dispatch";
 import { useAppSelector } from "../../hooks/use-app-selector";
@@ -26,21 +26,19 @@ const FilterForm: React.FC<{}> = () => {
         setSearchParams(searchParams);
         setFilterValue("");
     };
-    const filterProducts = async () => {
+    const filterProducts = useCallback(async () => {
         if (totalProducts && searchParams.get("id")) {
             const product = totalProducts.find(
                 (product) => product.id === Number(searchParams.get("id"))
             );
             if (product) {
-                console.log(product);
-
                 dispatch(productActions.replaceProducts([product]));
             }
         }
-    };
+    }, [totalProducts, dispatch, searchParams]);
     useEffect(() => {
         filterProducts();
-    }, [searchParams.get("id"), totalProducts]);
+    }, [filterProducts]);
     return (
         <form onSubmit={onSubmitHandler}>
             <div>
